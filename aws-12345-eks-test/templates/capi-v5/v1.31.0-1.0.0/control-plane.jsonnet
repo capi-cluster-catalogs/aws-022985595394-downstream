@@ -101,10 +101,10 @@ local publicCIDRs = [
         },
         subnets: [
           {
-            id: "subnet-032be6b4fef867aa7",
+            id: "",
           },
           {
-            id: "subnet-06b2aad00fca255bc",
+            id: "",
           },
         ],
         vpc: {
