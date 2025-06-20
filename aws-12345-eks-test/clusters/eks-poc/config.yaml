@@ -1,0 +1,25 @@
+aws:
+  region: us-east-1
+
+clusterConfig:
+  amiType: AL2_x86_64
+  diskSize: 250
+  systemNodeType: m5.xlarge
+  systemNodeReplicas: 1
+  systemNodeScaling:
+    minSize: 1
+    maxSize: 30
+  userNodeType: m5.xlarge
+  userNodeReplicas: 1
+  userNodeScaling:
+    minSize: 1
+    maxSize: 30
+  additionalTags:
+    application: ""
+    group: ""
+    organization: "engineering"
+    stack: ""
+    team: ""
+    email: "kubesources.com"
+    vpEmail: "kubesources.com"
+  iamAccessRoleNames: gitlab-runner-provisioner-role
