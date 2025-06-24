@@ -1,6 +1,7 @@
 local addons = import "./lib/addons.libsonnet";
 local kubernetesData = import "./lib/k8sData.libsonnet";
-local accountId = std.split(std.extVar("namespace"), "-")[1];
+local accountId = std.split(std.extVar("accountId"), "-")[1];
+local clusterName = std.extVar("clusterName");
 local clusterTags = std.parseYaml(clusterConfig).clusterConfig.additionalTags;
 local publicCIDRs = [
   "142.136.0.0/16"
@@ -11,11 +12,11 @@ local publicCIDRs = [
     apiVersion: "cluster.x-k8s.io/v1beta1",
     kind: "Cluster",
     metadata: {
-      name: std.extVar("clusterName"),
+      name: clusterName,
       namespace: std.extVar("namespace"),
       labels: {
         "cluster.kubesources.com/accountId": accountId,
-        "cluster.kubesources.name": std.extVar("clusterName"),
+        "cluster.kubesources.name": clusterName,
       },
     },
     spec: {
@@ -30,12 +31,12 @@ local publicCIDRs = [
       infrastructureRef: {
         apiVersion: "infrastructure.cluster.x-k8s.io/v1beta2",
         kind: "AWSManagedCluster",
-        name: std.extVar("clusterName"),
+        name: clusterName,
       },
       controlPlaneRef: {
         apiVersion: "controlplane.cluster.x-k8s.io/v1beta2",
         kind: "AWSManagedControlPlane",
-        name: std.extVar("clusterName") + "-cp",
+        name: clusterName + "-cp",
       },
     },
   },
@@ -43,11 +44,11 @@ local publicCIDRs = [
     apiVersion: "controlplane.cluster.x-k8s.io/v1beta2",
     kind: "AWSManagedCluster",
     metadata: {
-      name: std.extVar("clusterName"),
+      name: clusterName,
       namespace: std.extVar("namespace"),
       labels: {
         "cluster.kubesources.com/accountId": accountId,
-        "cluster.kubesources.name": std.extVar("clusterName"),
+        "cluster.kubesources.name": clusterName,
       },
     }
     spec: {}
@@ -56,18 +57,18 @@ local publicCIDRs = [
     apiVersion: "controlplane.cluster.x-k8s.io/v1beta2",
     kind: "AWSManagedControlPlane",
     metadata: {
-      name: std.extVar("clusterName") + "-cp",
+      name: clusterName + "-cp",
       namespace: std.extVar("namespace"),
       labels: {
         "cluster.kubesources.com/accountId": accountId,
-        "cluster.kubesources.name": std.extVar("clusterName"),
+        "cluster.kubesources.name": clusterName,
       },
     },
     spec: {
       additionalTags: clusterTags,
       addons: addons,
       associateOIDCProvider: true,
-      eksClusterName: std.extVar("clusterName"),
+      eksClusterName: clusterName,
       endpointAccess: {
         private: true,
         public: true,
@@ -120,11 +121,11 @@ local publicCIDRs = [
     apiVersion: "bootstrap.cluster.x-k8s.io/v1beta2",
     kind: "EKSConfigTemplate",
     metadata: {
-      name: std.extVar("clusterName"),
+      name: clusterName,
       namespace: std.extVar("namespace"),
       labels: {
         "cluster.kubesources.com/accountId": accountId,
-        "cluster.kubesources.name": std.extVar("clusterName"),
+        "cluster.kubesources.name": clusterName,
       },
     },
     spec: {
