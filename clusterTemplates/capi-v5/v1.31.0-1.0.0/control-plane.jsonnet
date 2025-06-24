@@ -53,83 +53,83 @@ local publicCIDRs = [
     }
     spec: {}
   },
-  {
-    apiVersion: "controlplane.cluster.x-k8s.io/v1beta2",
-    kind: "AWSManagedControlPlane",
-    metadata: {
-      name: clusterName + "-cp",
-      namespace: std.extVar("namespace"),
-      labels: {
-        "cluster.kubesources.com/accountId": accountId,
-        "cluster.kubesources.name": clusterName,
-      },
-    },
-    spec: {
-      additionalTags: clusterTags,
-      addons: addons,
-      associateOIDCProvider: true,
-      eksClusterName: clusterName,
-      endpointAccess: {
-        private: true,
-        public: true,
-        publicCIDRs: publicCIDRs,
-      },
-      iamAuthenticatorConfig: {
-        mapRoles: [
-          {
-            username: "kubernetes-admin",
-            rolearn: "arn:aws:iam::022985595394:role/gitlab-runner-provisioner-role",
-            groups: [
-              "system:masters",
-            ],
-          },
-        ],
-      },
-      identityRef: {
-        kind: "AWSClusterRoleIdentity",
-        name: "0123456",
-      },
-      logging: {
-        apiServer: true,
-        audit: true,
-        authenticator: true,
-        controllerManager: true,
-        scheduler: true,
-      },
-      network: {
-        securityGroupOverrides: {
-          "node-eks-additional": "sg-0b8a3d770a6ea6c67",
-        },
-        subnets: [
-          {
-            id: "",
-          },
-          {
-            id: "",
-          },
-        ],
-        vpc: {
-          id: std.extVar("networking.vpc.id"),
-        },
-      },
-      region: std.extVar("aws.region"),
-      sshKeyName: "default",
-      version: kubernetesData.kubernetesVersion
-    },
-  },
-  {
-    apiVersion: "bootstrap.cluster.x-k8s.io/v1beta2",
-    kind: "EKSConfigTemplate",
-    metadata: {
-      name: clusterName,
-      namespace: std.extVar("namespace"),
-      labels: {
-        "cluster.kubesources.com/accountId": accountId,
-        "cluster.kubesources.name": clusterName,
-      },
-    },
-    spec: {
-      template: {},
-    },
-  },
+  // {
+  //   apiVersion: "controlplane.cluster.x-k8s.io/v1beta2",
+  //   kind: "AWSManagedControlPlane",
+  //   metadata: {
+  //     name: clusterName + "-cp",
+  //     namespace: std.extVar("namespace"),
+  //     labels: {
+  //       "cluster.kubesources.com/accountId": accountId,
+  //       "cluster.kubesources.name": clusterName,
+  //     },
+  //   },
+  //   spec: {
+  //     additionalTags: clusterTags,
+  //     addons: addons,
+  //     associateOIDCProvider: true,
+  //     eksClusterName: clusterName,
+  //     endpointAccess: {
+  //       private: true,
+  //       public: true,
+  //       publicCIDRs: publicCIDRs,
+  //     },
+  //     iamAuthenticatorConfig: {
+  //       mapRoles: [
+  //         {
+  //           username: "kubernetes-admin",
+  //           rolearn: "arn:aws:iam::022985595394:role/gitlab-runner-provisioner-role",
+  //           groups: [
+  //             "system:masters",
+  //           ],
+  //         },
+  //       ],
+  //     },
+  //     identityRef: {
+  //       kind: "AWSClusterRoleIdentity",
+  //       name: "0123456",
+  //     },
+  //     logging: {
+  //       apiServer: true,
+  //       audit: true,
+  //       authenticator: true,
+  //       controllerManager: true,
+  //       scheduler: true,
+  //     },
+  //     network: {
+  //       securityGroupOverrides: {
+  //         "node-eks-additional": "sg-0b8a3d770a6ea6c67",
+  //       },
+  //       subnets: [
+  //         {
+  //           id: "",
+  //         },
+  //         {
+  //           id: "",
+  //         },
+  //       ],
+  //       vpc: {
+  //         id: std.extVar("networking.vpc.id"),
+  //       },
+  //     },
+  //     region: std.extVar("aws.region"),
+  //     sshKeyName: "default",
+  //     version: kubernetesData.kubernetesVersion
+  //   },
+  // },
+  // {
+  //   apiVersion: "bootstrap.cluster.x-k8s.io/v1beta2",
+  //   kind: "EKSConfigTemplate",
+  //   metadata: {
+  //     name: clusterName,
+  //     namespace: std.extVar("namespace"),
+  //     labels: {
+  //       "cluster.kubesources.com/accountId": accountId,
+  //       "cluster.kubesources.name": clusterName,
+  //     },
+  //   },
+  //   spec: {
+  //     template: {},
+  //   },
+  // },
 ]
