@@ -1,5 +1,4 @@
-aws:
-  region: us-east-1
+clusterTemplatePath: capi-v5/v1.31.0-1.0.0
 
 clusterConfig:
   amiType: AL2_x86_64
