@@ -3,6 +3,10 @@ clusterTemplate:
   version: v1.31.0-1.0.0
 
 clusterConfig:
+  endpointAccess:
+    public: true
+    publicCIDRs: ["0.0.0.0/0"]
+  additionaSecurityGroup: capi-cm-poc-node-20250625000420831600000008
   amiType: AL2_x86_64
   diskSize: 250
   systemNodeType: m5.xlarge
