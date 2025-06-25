@@ -6,7 +6,7 @@ clusterConfig:
   clusterRegion: us-east-1
   endpointAccess:
     public: true
-    publicCIDRs: ["0.0.0.0/0"]
+    publicCIDRs: "0.0.0.0/0"
   additionaSecurityGroup: capi-cm-poc-node-20250625000420831600000008
   additionalTags:
     application: ""
@@ -35,5 +35,5 @@ aws:
   networking:
     vpcId: vpc-0411509b2d364608b
     publicSubnets: ["subnet-0d93216ed065ce406", "subnet-0f884e77df16b4227"]
-    privateSubnets: ["subnet-00a3bb7a4571f6c78", "subnet-09f25030d8d5e8d75"]
+    privateSubnets: subnet-00a3bb7a4571f6c78,subnet-09f25030d8d5e8d75
     intraSubnets: ["subnet-085935896ac0eb950", "subnet-096adfd0dc3764d8e"]

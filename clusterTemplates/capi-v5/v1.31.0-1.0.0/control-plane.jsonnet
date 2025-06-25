@@ -128,9 +128,7 @@ local clusterTags = std.parseYaml(cluster).clusterConfig.tags;
       endpointAccess: {
         private: true,
         public: stringToBool(std.extVar('clusterPublicAccess')),
-        publicCIDRs: [
-          std.extVar('clusterPublicAccessCidrs'),
-        ],
+        publicCIDRs: std.split(std.extVar('clusterPublicAccessCidrs'), ',')
       },
       iamAuthenticatorConfig: {
         mapRoles: clusterAdminRoleNames,
@@ -161,7 +159,7 @@ local clusterTags = std.parseYaml(cluster).clusterConfig.tags;
         securityGroupOverrides: {
           'node-eks-additional': std.extVar('clusterAdditionalSecurityGroup')
         },
-        subnets: awsPrivateSubnets,
+        subnets: std.split(std.extVar('awsPrivateSubnets'), ','),
         vpc: {
           id: std.extVar('awsVpcId'),
         },
