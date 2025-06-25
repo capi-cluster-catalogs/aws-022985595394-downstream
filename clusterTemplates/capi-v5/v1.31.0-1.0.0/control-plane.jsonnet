@@ -69,7 +69,7 @@ local clusterTags = std.parseYaml(cluster).clusterConfig.tags;
     },
     spec: {
       allowedNamespaces: [
-        downstreamNamespace,
+        list: downstreamNamespace,
       ],
       durationSeconds: 3600,
       roleARN: 'arn:aws:iam::' + awsAccountId + ':role/' + awsAccountId + '-capa-assume-role',
