@@ -7,7 +7,7 @@ local clusterName = std.extVar('clusterName');
 
 local awsPrivateSubnets = std.map(function(value) {
   id: value,
-}, std.extVar('privateSubnets'));
+}, std.extVar('awsPrivateSubnets'));
 
 
 local clusterAdminRoleNames = std.map(function(roleName) {
