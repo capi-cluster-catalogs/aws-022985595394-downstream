@@ -10,6 +10,8 @@ local awsPrivateSubnets = std.map(function(value) {
 }, std.extVar('awsPrivateSubnets'));
 
 
+
+
 local clusterAdminRoleNames = std.map(function(roleName) {
   rolearn: std.format('arn:aws:iam::%(awsAccountId)s:role/%(roleName)s', {awsAccountId: awsAccountId, roleName: roleName}),
   username: "sso-admin",
@@ -126,7 +128,7 @@ local clusterTags = std.parseYaml(cluster).clusterConfig.tags;
       endpointAccess: {
         private: true,
         public: stringToBool(std.extVar('clusterPublicAccess')),
-        publicCIDRs: std.extVar('clusterPublicAccessCidrs'),
+        publicCIDRs: awsPrivateSubnets,
       },
       iamAuthenticatorConfig: {
         mapRoles: clusterAdminRoleNames,
