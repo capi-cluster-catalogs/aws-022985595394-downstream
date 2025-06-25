@@ -15,6 +15,11 @@ local clusterAdminRoleNames = std.map(function(roleName) {
   username: "sso-admin",
   groups: ['sso-admin-group'],
 }, std.extVar('clusterAdminRoleNames'));
+
+local stringToBool(s) =
+  if s == "true" then true
+  else if s == "false" then false
+  else error "invalid boolean: " + std.manifestJson(s);
  
 // local cluster = importstr './clusters//config.yaml'; // Import the config file, presented into scope by ArgoCD under the hood via `libs`.
 // local clusterTags = std.parseYaml(cluster).cluster.tags;
@@ -120,7 +125,7 @@ local clusterTags = std.parseYaml(cluster).clusterConfig.tags;
       eksClusterName: clusterName,
       endpointAccess: {
         private: true,
-        public: std.extVar('clusterPublicAccess'),
+        public: stringToBool(std.extVar('clusterPublicAccess')),
         publicCIDRs: std.extVar('clusterPublicAccessCidrs'),
       },
       iamAuthenticatorConfig: {
