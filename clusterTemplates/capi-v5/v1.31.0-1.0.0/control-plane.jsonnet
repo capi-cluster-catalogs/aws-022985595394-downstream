@@ -7,14 +7,14 @@ local clusterName = std.extVar('clusterName');
 
 local awsPrivateSubnets = std.map(function(value) {
   id: value,
-}, std.exVar('privateSubnets'))
+}, std.exVar('privateSubnets'));
 
 
 local clusterAdminRoleNames = std.map(function(roleName) {
   rolearn: std.format('arn:aws:iam::%(awsAccountId)s:role/%(roleName)s', {awsAccountId: awsAccountId, roleName: roleName}),
   username: "sso-admin",
   groups: ['sso-admin-group'],
-}, std.exVar('clusterAdminRoleNames'))
+}, std.exVar('clusterAdminRoleNames'));
  
 // local cluster = importstr './clusters//config.yaml'; // Import the config file, presented into scope by ArgoCD under the hood via `libs`.
 // local clusterTags = std.parseYaml(cluster).cluster.tags;
