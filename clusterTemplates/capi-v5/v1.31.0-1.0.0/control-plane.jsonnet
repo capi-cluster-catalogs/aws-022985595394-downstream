@@ -68,10 +68,13 @@ local clusterTags = std.parseYaml(cluster).clusterConfig.tags;
       namespace: downstreamNamespace,
     },
     spec: {
-      allowedNamespaces: [
-        list: downstreamNamespace,
-      ],
+      allowedNamespaces: {
+        list: [
+          downstreamNamespace,
+        ]
+      },
       durationSeconds: 3600,
+      sessionName: awsAccountId + '-capa-role-local-session',
       roleARN: 'arn:aws:iam::' + awsAccountId + ':role/' + awsAccountId + '-capa-assume-role',
       sourceIdentityRef: {
         kind: 'AWSClusterControllerIdentity',
