@@ -3,10 +3,20 @@ clusterTemplate:
   version: v1.31.0-1.0.0
 
 clusterConfig:
+  clusterRegion: us-east-1
   endpointAccess:
     public: true
     publicCIDRs: ["0.0.0.0/0"]
   additionaSecurityGroup: capi-cm-poc-node-20250625000420831600000008
+  additionalTags:
+    application: ""
+    group: ""
+    organization: "engineering"
+    stack: ""
+    team: ""
+    email: "kubesources.com"
+    vpEmail: "kubesources.com"
+  adminAccessRoleNames: ["gitlab-runner-provisioner-role", "what"]
   amiType: AL2_x86_64
   diskSize: 250
   systemNodeType: m5.xlarge
@@ -19,12 +29,11 @@ clusterConfig:
   userNodeScaling:
     minSize: 1
     maxSize: 30
-  additionalTags:
-    application: ""
-    group: ""
-    organization: "engineering"
-    stack: ""
-    team: ""
-    email: "kubesources.com"
-    vpEmail: "kubesources.com"
-  iamAccessRoleNames: gitlab-runner-provisioner-role
+
+aws:
+  region: us-east-1
+  networking:
+    vpcId: vpc-0411509b2d364608b
+    publicSubnets: subnet-0d93216ed065ce406,subnet-0f884e77df16b4227
+    privateSubnets: ["subnet-00a3bb7a4571f6c78", "subnet-09f25030d8d5e8d75"]
+    intraSubnets: subnet-085935896ac0eb950,subnet-096adfd0dc3764d8e
