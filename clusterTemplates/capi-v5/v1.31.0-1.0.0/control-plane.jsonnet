@@ -7,7 +7,7 @@ local clusterName = std.extVar('clusterName');
 
 local awsPrivateSubnets = std.map(function(value) {
   id: value,
-}, std.extVar('awsPrivateSubnets'));
+}, std.split(std.extVar('awsPrivateSubnets'), ','));
 
 
 
@@ -159,7 +159,7 @@ local clusterTags = std.parseYaml(cluster).clusterConfig.tags;
         securityGroupOverrides: {
           'node-eks-additional': std.extVar('clusterAdditionalSecurityGroup')
         },
-        subnets: std.split(std.extVar('awsPrivateSubnets'), ','),
+        subnets: awsPrivateSubnets,
         vpc: {
           id: std.extVar('awsVpcId'),
         },
