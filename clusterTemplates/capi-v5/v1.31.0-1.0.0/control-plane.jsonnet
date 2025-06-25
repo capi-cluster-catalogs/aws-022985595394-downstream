@@ -75,7 +75,7 @@ local clusterTags = std.parseYaml(cluster).clusterConfig.tags;
       },
       durationSeconds: 3600,
       sessionName: awsAccountId + '-capa-role-local-session',
-      roleARN: 'arn:aws:iam::' + awsAccountId + ':role/' + awsAccountId + '-capa-assume-role',
+      roleARN: 'arn:aws:iam::' + awsAccountId + ':role/CAPARole-local',
       sourceIdentityRef: {
         kind: 'AWSClusterControllerIdentity',
         name: 'default',
