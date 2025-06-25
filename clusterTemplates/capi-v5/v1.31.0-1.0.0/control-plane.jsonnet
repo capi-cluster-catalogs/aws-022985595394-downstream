@@ -180,5 +180,5 @@ local clusterTags = std.parseYaml(cluster).clusterConfig.tags;
   //   spec: {
   //     template: {},
   //   },
-  ,
+  // ,
 ]
