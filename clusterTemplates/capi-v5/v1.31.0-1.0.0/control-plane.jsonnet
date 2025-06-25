@@ -128,7 +128,7 @@ local clusterTags = std.parseYaml(cluster).clusterConfig.tags;
       endpointAccess: {
         private: true,
         public: stringToBool(std.extVar('clusterPublicAccess')),
-        publicCIDRs: std.flattenArrays(std.extVar('clusterPublicAccessCidrs')),
+        publicCIDRs: clusterPublicAccessCidrs,
       },
       iamAuthenticatorConfig: {
         mapRoles: clusterAdminRoleNames,
