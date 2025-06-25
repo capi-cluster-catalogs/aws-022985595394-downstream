@@ -13,7 +13,7 @@ local awsPrivateSubnets = std.map(function(value) {
 
 
 local clusterAdminRoleNames = std.map(function(roleName) {
-  rolearn: std.format('arn:aws:iam::%(awsAccountId)s:role/%(roleName)s', {awsAccountId: awsAccountId, roleName: roleName}),
+  rolearn: std.format('arn:aws:iam::%(awsAccountId)s:role/%(roleName)s' % {awsAccountId: awsAccountId, roleName: roleName}),
   username: "sso-admin",
   groups: ['sso-admin-group'],
 }, std.extVar('clusterAdminRoleNames'));
