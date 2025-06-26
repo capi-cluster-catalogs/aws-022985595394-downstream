@@ -7,16 +7,25 @@ clusterConfig:
   endpointAccess:
     public: true
     publicCIDRs: "0.0.0.0/0"
-  additionaSecurityGroup: capi-cm-poc-node-20250625000420831600000008
+  additionaSecurityGroup: sg-089188b61b545498e #capi-shared-sg
+  adminAccessRoleNames: "gitlab-runner-provisioner-role,whatever"
   additionalTags:
-    application: ""
-    group: ""
-    organization: "engineering"
-    stack: ""
-    team: ""
-    email: "kubesources.com"
-    vpEmail: "kubesources.com"
-  adminAccessRoleNames: ["gitlab-runner-provisioner-role", "what"]
+    application: capi-downstream-poc
+    group: engineering
+    organization: engineering
+    stack: phoeengineeringnix
+    team: engineering
+    email: kubesources.com
+    vpEmail: kubesources.com
+    app_id: NA
+    app_ref_id: NA
+    cost_code: NA
+    data_priv: NA
+    ops_owner: kubesources.com
+    sec_owner: kubesources.com
+    dev_owner: kubesources.com
+
+  customizations: "KEDA"
   amiType: AL2_x86_64
   diskSize: 250
   systemNodeType: m5.xlarge
@@ -33,7 +42,7 @@ clusterConfig:
 aws:
   region: us-east-1
   networking:
-    vpcId: vpc-0411509b2d364608b
-    publicSubnets: ["subnet-0d93216ed065ce406", "subnet-0f884e77df16b4227"]
-    privateSubnets: subnet-00a3bb7a4571f6c78,subnet-09f25030d8d5e8d75
-    intraSubnets: ["subnet-085935896ac0eb950", "subnet-096adfd0dc3764d8e"]
+    vpcId: vpc-04c76c355e6c7d395
+    publicSubnets: "subnet-0cf9753f264b15813,subnet-01859952eaa7295ee"
+    privateSubnets: "subnet-0f3c87138547be048,subnet-07795a170e35ac68a"
+    intraSubnets: "subnet-0f7284d81ddb3229f,subnet-0651567f40cf51151"

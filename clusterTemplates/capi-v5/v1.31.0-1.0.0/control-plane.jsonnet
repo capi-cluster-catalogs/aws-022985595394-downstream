@@ -1,6 +1,10 @@
+
+
+
+
+
 local addons = import './lib/addons.libsonnet';
 local k8sData = import './lib/k8sData.libsonnet';
- 
 local awsAccountId = std.extVar('awsAccountId');
 local downstreamNamespace = std.extVar('downstreamNamespace');
 local clusterName = std.extVar('clusterName');
@@ -9,25 +13,17 @@ local awsPrivateSubnets = std.map(function(value) {
   id: value,
 }, std.split(std.extVar('awsPrivateSubnets'), ','));
 
-
-
-
 local clusterAdminRoleNames = std.map(function(roleName) {
-  rolearn: std.format('arn:aws:iam::%(awsAccountId)s:role/%(roleName)s' % {awsAccountId: awsAccountId, roleName: roleName}),
+  rolearn: std.format('arn:aws:iam::%s:role/%s', [awsAccountId, roleName]),
   username: "sso-admin",
   groups: ['sso-admin-group'],
-}, std.extVar('clusterAdminRoleNames'));
+}, std.split(std.extVar('clusterAdminRoleNames'), ','));
 
 local stringToBool(s) =
   if s == "true" then true
   else if s == "false" then false
   else error "invalid boolean: " + std.manifestJson(s);
- 
-// local cluster = importstr './clusters//config.yaml'; // Import the config file, presented into scope by ArgoCD under the hood via `libs`.
-// local clusterTags = std.parseYaml(cluster).cluster.tags;
-local cluster = import './clusters/ljc/capi-downstream-poc/config.yaml'; // Import the config file, presented into scope by ArgoCD under the hood via `libs`.
-// local cluster = import './clusters/' + std.extVar('BfeClusterFolderName') + std.extVar('clusterName') + '/config.yaml'; // Import the config file, presented into scope by ArgoCD under the hood via `libs`.
-local clusterTags = std.parseYaml(cluster).clusterConfig.tags;
+
  
 [
   {
@@ -37,8 +33,8 @@ local clusterTags = std.parseYaml(cluster).clusterConfig.tags;
       name: clusterName,
       namespace: downstreamNamespace,
       labels: {
-        'bfe.phoenix.spectrum.com/account': awsAccountId,
-        'bfe.phoenix.spectrum.com/name': clusterName,
+        'ljc.kubesources.com/account': awsAccountId,
+        'ljc.kubesources.com/name': clusterName,
       },
     },
     spec: {
@@ -71,8 +67,8 @@ local clusterTags = std.parseYaml(cluster).clusterConfig.tags;
       name: clusterName,
       namespace: downstreamNamespace,
       labels: {
-        'bfe.phoenix.spectrum.com/account': awsAccountId,
-        'bfe.phoenix.spectrum.com/name': clusterName,
+        'ljc.kubesources.com/account': awsAccountId,
+        'ljc.kubesources.com/name': clusterName,
       },
     },
     spec: {},
@@ -84,6 +80,10 @@ local clusterTags = std.parseYaml(cluster).clusterConfig.tags;
     metadata: {
       name: awsAccountId + "-aws-cluster-role-identity",
       namespace: downstreamNamespace,
+      labels: {
+        'ljc.kubesources.com/account': awsAccountId,
+        'ljc.kubesources.com/name': clusterName,
+      },
     },
     spec: {
       allowedNamespaces: {
@@ -92,8 +92,8 @@ local clusterTags = std.parseYaml(cluster).clusterConfig.tags;
         ]
       },
       durationSeconds: 3600,
-      sessionName: awsAccountId + '-capa-role-local-session',
-      roleARN: 'arn:aws:iam::' + awsAccountId + ':role/CAPARole-local',
+      sessionName: awsAccountId + '-aws-cluster-role-identity-session',
+      roleARN: 'arn:aws:iam::' + awsAccountId + ':role/' + awsAccountId + '-capa-assume-role',
       sourceIdentityRef: {
         kind: 'AWSClusterControllerIdentity',
         name: 'default',
@@ -108,42 +108,39 @@ local clusterTags = std.parseYaml(cluster).clusterConfig.tags;
     metadata: {
       name: clusterName,
       namespace: downstreamNamespace,
+      labels: {
+        'ljc.kubesources.com/account': awsAccountId,
+        'ljc.kubesources.com/name': clusterName,
+      },
     },
     spec: {
-      additionalTags: {},
-      // additionalTags: clusterTags,
-      // additionalTags: {
-      //   'charter.com/source': 'capi',
-      //   App: std.extVar('cluster.tags.application'),
-      //   Group: std.extVar('cluster.tags.group'),
-      //   Org: std.extVar('cluster.tags.organization'),
-      //   Stack: std.extVar('cluster.tags.stack'),
-      //   Team: std.extVar('cluster.tags.team'),
-      //   Email: std.extVar('cluster.tags.email'),
-      //   VicePresident: std.extVar('cluster.tags.vpEmail'),
-      // },
+      additionalTags: {
+        App: std.extVar('clusterAdditionalTagsApp'),
+        Group: std.extVar('clusterAdditionalTagsGroup'),
+        Org: std.extVar('clusterAdditionalTagsOrg'),
+        Stack: std.extVar('clusterAdditionalTagsStack'),
+        Team: std.extVar('clusterAdditionalTagsTeam'),
+        Email: std.extVar('clusterAdditionalTagsEmail'),
+        VpEmail: std.extVar('clusterAdditionalTagsVpEmail'),
+        AppId: std.extVar('clusterAdditionalTagsAppId'),
+        AppRefId: std.extVar('clusterAdditionalTagsAppRefId'),
+        CostCode: std.extVar('clusterAdditionalTagsCostCode'),
+        DataPriv: std.extVar('clusterAdditionalTagsDataPriv'),
+        OpsOwner: std.extVar('clusterAdditionalTagsOpsOwner'),
+        SecOwner: std.extVar('clusterAdditionalTagsSecOwner'),
+        DevOwner: std.extVar('clusterAdditionalTagsDevOwner'),
+      },
       addons: addons,
       associateOIDCProvider: true,
       eksClusterName: clusterName,
       endpointAccess: {
         private: true,
         public: stringToBool(std.extVar('clusterPublicAccess')),
-        publicCIDRs: std.split(std.extVar('clusterPublicAccessCidrs'), ',')
+        publicCIDRs: std.split(std.extVar('clusterPublicAccessCidrs'), ','),
       },
       iamAuthenticatorConfig: {
         mapRoles: clusterAdminRoleNames,
       },
-      // iamAuthenticatorConfig: {
-      //   mapRoles: std.flattenArrays([std.mapWithIndex(function(index, x) {
-      //     username: std.format('Admin-%s', [std.toString(index)]),
-      //     rolearn: std.format('arn:aws:iam::%s:role/%s', [awsAccountId, x]),
-      //     groups: ['system:masters'],
-      //   }, std.split(std.extVar('cluster.authentication.iamRoles'), ',')), [{
-      //     username: 'system:node:{{EC2PrivateDNSName}}',
-      //     rolearn: std.format('arn:aws:iam::%s:role/capi-karpenter-node-role', awsAccountId),
-      //     groups: ['system:masters'],
-      //   }]]),
-      // },
       identityRef: {
         kind: 'AWSClusterRoleIdentity',
         name: awsAccountId + "-aws-cluster-role-identity",
@@ -173,19 +170,19 @@ local clusterTags = std.parseYaml(cluster).clusterConfig.tags;
       version: k8sData.kubernetesVersion
     },
   },
-  // {
-  //   apiVersion: 'bootstrap.cluster.x-k8s.io/v1beta2',
-  //   kind: 'EKSConfigTemplate',
-  //   metadata: {
-  //     name: std.extVar('clusterName'),
-  //     namespace: downstreamNamespace,
-  //     labels: {
-  //       'cluster.charter.com/account': std.extVar('account'),
-  //       'cluster.charter.com/name': std.extVar('clusterName'),
-  //     },
-  //   },
-  //   spec: {
-  //     template: {},
-  //   },
-  // ,
+  {
+    apiVersion: 'bootstrap.cluster.x-k8s.io/v1beta2',
+    kind: 'EKSConfigTemplate',
+    metadata: {
+      name: clusterName,
+      namespace: downstreamNamespace,
+      labels: {
+        'ljc.kubesources.com/account': awsAccountId,
+        'ljc.kubesources.com/name': clusterName,
+      },
+    },
+    spec: {
+      template: {},
+    },
+  ,
 ]
