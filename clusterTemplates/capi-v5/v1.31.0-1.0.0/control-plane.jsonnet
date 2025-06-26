@@ -101,7 +101,7 @@ local stringToBool(s) =
     apiVersion: 'controlplane.cluster.x-k8s.io/v1beta2',
     kind: 'AWSManagedControlPlane',
     metadata: {
-      name: clusterName,
+      name: clusterName + '-cp',
       namespace: downstreamNamespace,
       labels: {
         'ljc.kubesources.com/account': awsAccountId,
