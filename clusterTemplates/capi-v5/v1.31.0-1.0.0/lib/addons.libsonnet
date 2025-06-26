@@ -11,12 +11,12 @@
   },
   {
     name: "kube-proxy",
-    version: "v1.32.3-eksbuild.7",
+    version: "v1.31.2-eksbuild.3",
     conflictResolution: "overwrite",
   },
   {
     name: "vpc-cni",
-    version: "v1.6.3-eksbuild.1",
+    version: "v1.19.5-eksbuild.3",
     conflictResolution: "overwrite",
   },
 ]
