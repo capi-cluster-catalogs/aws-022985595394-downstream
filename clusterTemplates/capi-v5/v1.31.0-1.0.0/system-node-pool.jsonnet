@@ -72,9 +72,9 @@ local amiData = import "./lib/amiData.libsonnet";
       eksNodegroupName: nodePoolName,
       amiType: "CUSTOM",
       awsLaunchTemplate: {
-        imageLookupBaseOS: k8sData.baseOS,
-        imageLookupFormat: k8sData.lookupFormat,
-        imageLookupOrg: k8sData.lookupOrg,
+        imageLookupBaseOS: amiData.baseOS,
+        imageLookupFormat: amiData.lookupFormat,
+        imageLookupOrg: amiData.lookupOrg,
         name: nodePoolName,
         instanceType: std.extVar('clusterSystemNodeType'),
         rootVolume: {
