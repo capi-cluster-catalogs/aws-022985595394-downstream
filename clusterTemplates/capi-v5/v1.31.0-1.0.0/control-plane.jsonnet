@@ -179,5 +179,5 @@ local stringToBool(s) =
     spec: {
       template: {},
     },
-  ,
+  },
 ]
