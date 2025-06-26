@@ -19,7 +19,7 @@ clusterConfig:
     email: kubesources.com
     vpEmail: kubesources.com
     app_id: NA
-    app_ref_id: NA
+    app_ref_id:
     cost_code: NA
     data_priv: NA
     ops_owner: kubesources.com
