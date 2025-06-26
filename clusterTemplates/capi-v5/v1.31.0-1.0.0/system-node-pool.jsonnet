@@ -85,7 +85,7 @@ local k8sData = import "./lib/k8sData.libsonnet";
           httpPutResponseHopLimit: 2,
         },
       },
-      availabilityZones: std.split(std.extVar('awsAvailabilityZones')),
+      availabilityZones: std.split(std.extVar('awsAvailabilityZones'), ','),
       labels: {
         'ljc.kubesources.com/account': awsAccountId,
         'ljc.kubesources.com/name': clusterName,
