@@ -1,8 +1,3 @@
-
-
-
-
-
 local addons = import './lib/addons.libsonnet';
 local k8sData = import './lib/k8sData.libsonnet';
 local awsAccountId = std.extVar('awsAccountId');

@@ -8,7 +8,8 @@ clusterConfig:
     public: true
     publicCIDRs: "0.0.0.0/0"
   additionaSecurityGroup: sg-089188b61b545498e #capi-shared-sg
-  adminAccessRoleNames: "gitlab-runner-provisioner-role,whatever"
+  # adminAccessRoleNames: "gitlab-runner-provisioner-role,whatever"
+  adminAccessRoleNames: "gitlab-runner-provisioner-role"
   additionalTags:
     application: capi-downstream-poc
     group: engineering
