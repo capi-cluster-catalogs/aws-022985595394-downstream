@@ -1,12 +1,13 @@
 local clusterName = std.extVar('clusterName');
 local awsAccountId = std.extVar('awsAccountId');
+local downstreamNamespace = std.extVar('downstreamNamespace');
 [
   {
     apiVersion: 'v1',
     kind: 'Secret',
     metadata: {
       name: clusterName + '-userdata',
-      namespace: awsAccountId,
+      namespace: downstreamNamespace,
       labels: {
         'cluster.charter.com/account': awsAccountId,
         'cluster.charter.com/name': clusterName,
