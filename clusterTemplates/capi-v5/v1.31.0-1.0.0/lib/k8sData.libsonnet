@@ -1,5 +1,5 @@
 {
-  kubernetesVersion: "v1.31",
-  kubernetesVersionFloat: "1.31",
-  kubernetesMachinePoolVersion: "v1.31.0",
+  kubernetesVersion: "v1.32",
+  kubernetesVersionFloat: "1.32",
+  kubernetesMachinePoolVersion: "v1.32.0",
 }

@@ -27,21 +27,25 @@ clusterConfig:
     dev_owner: kubesources.com
 
   customizations: "KEDA"
-  amiType: AL2_x86_64
+
+  systemNode:
+    type: m5.xlarge
+    replicas: 1
+    autoscaling:
+      minSize: 1
+      maxSize: 30
+
+  userNode:
+    type: m5.xlarge
+    replicas: 1
+    autoscaling:
+      minSize: 1
+      maxSize: 30
   diskSize: 250
-  systemNodeType: m5.xlarge
-  systemNodeReplicas: 1
-  systemNodeScaling:
-    minSize: 1
-    maxSize: 30
-  userNodeType: m5.xlarge
-  userNodeReplicas: 1
-  userNodeScaling:
-    minSize: 1
-    maxSize: 30
 
 aws:
   region: us-east-1
+  availabilityZones: "us-east-1a,us-east-1b"
   networking:
     vpcId: vpc-04c76c355e6c7d395
     publicSubnets: "subnet-0cf9753f264b15813,subnet-01859952eaa7295ee"
