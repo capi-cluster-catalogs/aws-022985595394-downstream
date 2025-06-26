@@ -19,7 +19,7 @@ local amiData = import "./lib/amiData.libsonnet";
     },
     spec: {
       clusterName: clusterName,
-      replicas: std.extVar('clusterSystemNodeReplicas'),
+      replicas: std.parseInt(std.extVar('clusterSystemNodeReplicas')),
       template: {
         spec: {
           clusterName: clusterName,
