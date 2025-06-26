@@ -3,6 +3,7 @@ local clusterName = std.extVar('clusterName');
 local nodePoolName = std.extVar('clusterName') + '-system-pool';
 local downstreamNamespace = std.extVar('downstreamNamespace');
 local k8sData = import "./lib/k8sData.libsonnet";
+local amiData = import "./lib/amiData.libsonnet";
 
 [
   {
