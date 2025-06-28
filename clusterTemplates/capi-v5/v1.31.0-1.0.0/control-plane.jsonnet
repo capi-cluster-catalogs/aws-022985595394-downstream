@@ -19,6 +19,10 @@ local stringToBool(s) =
   else if s == "false" then false
   else error "invalid boolean: " + std.manifestJson(s);
 
+local customLabels = {
+  'ljc.kubesources.com/account': awsAccountId,
+  'ljc.kubesources.com/name': clusterName,
+};
  
 [
   {
@@ -27,10 +31,7 @@ local stringToBool(s) =
     metadata: {
       name: clusterName,
       namespace: downstreamNamespace,
-      labels: {
-        'ljc.kubesources.com/account': awsAccountId,
-        'ljc.kubesources.com/name': clusterName,
-      },
+      labels: customLabels,
     },
     spec: {
       clusterNetwork: {
@@ -61,10 +62,7 @@ local stringToBool(s) =
     metadata: {
       name: clusterName,
       namespace: downstreamNamespace,
-      labels: {
-        'ljc.kubesources.com/account': awsAccountId,
-        'ljc.kubesources.com/name': clusterName,
-      },
+      labels: customLabels,
     },
     spec: {},
   },
@@ -73,12 +71,9 @@ local stringToBool(s) =
     apiVersion: "infrastructure.cluster.x-k8s.io/v1beta2",
     kind: "AWSClusterRoleIdentity",
     metadata: {
-      name: awsAccountId + "-aws-cluster-role-identity",
+      name: clusterName,
       namespace: downstreamNamespace,
-      labels: {
-        'ljc.kubesources.com/account': awsAccountId,
-        'ljc.kubesources.com/name': clusterName,
-      },
+      labels: customLabels,
     },
     spec: {
       allowedNamespaces: {
@@ -103,10 +98,7 @@ local stringToBool(s) =
     metadata: {
       name: clusterName + '-cp',
       namespace: downstreamNamespace,
-      labels: {
-        'ljc.kubesources.com/account': awsAccountId,
-        'ljc.kubesources.com/name': clusterName,
-      },
+      labels: customLabels,
     },
     spec: {
       additionalTags: {
@@ -138,7 +130,7 @@ local stringToBool(s) =
       },
       identityRef: {
         kind: 'AWSClusterRoleIdentity',
-        name: awsAccountId + "-aws-cluster-role-identity",
+        name: clusterName,
       },
       logging: {
         apiServer: true,
@@ -171,10 +163,7 @@ local stringToBool(s) =
     metadata: {
       name: clusterName,
       namespace: downstreamNamespace,
-      labels: {
-        'ljc.kubesources.com/account': awsAccountId,
-        'ljc.kubesources.com/name': clusterName,
-      },
+      labels: customLabels,
     },
     spec: {
       template: {},

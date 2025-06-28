@@ -5,6 +5,11 @@ local downstreamNamespace = std.extVar('downstreamNamespace');
 local k8sData = import "./lib/k8sData.libsonnet";
 local amiData = import "./lib/amiData.libsonnet";
 
+local customLabels = {
+  'ljc.kubesources.com/account': awsAccountId,
+  'ljc.kubesources.com/name': clusterName,
+};
+
 [
   {
     apiVersion: 'cluster.x-k8s.io/v1beta1',
@@ -12,10 +17,7 @@ local amiData = import "./lib/amiData.libsonnet";
     metadata: {
       name: nodePoolName,
       namespace: downstreamNamespace,
-      labels: {
-        'ljc.kubesources.com/account': awsAccountId,
-        'ljc.kubesources.com/name': clusterName,
-      },
+      labels: customLabels,
     },
     spec: {
       clusterName: clusterName,
@@ -47,10 +49,7 @@ local amiData = import "./lib/amiData.libsonnet";
     metadata: {
       name: nodePoolName,
       namespace: downstreamNamespace,
-      labels: {
-        'ljc.kubesources.com/account': awsAccountId,
-        'ljc.kubesources.com/name': clusterName,
-      },
+      labels: customLabels,
     },
     spec: {
       additionalTags: {
@@ -87,11 +86,11 @@ local amiData = import "./lib/amiData.libsonnet";
         },
       },
       availabilityZones: std.split(std.extVar('awsAvailabilityZones'), ','),
-      labels: {
-        'ljc.kubesources.com/account': awsAccountId,
-        'ljc.kubesources.com/name': clusterName,
+      labels: std.mergePatch(customLabels, {
         'ljc.kubesources.com/node-role': 'system',
-      },
+        'ljc.kubesources.com/node-group-name': nodePoolName,
+        'ljc.kubesources.com/control-plane': 'true',
+      }),
       taints: [
         {
           key: 'ljc.kubesources.com/node-role',
@@ -100,14 +99,23 @@ local amiData = import "./lib/amiData.libsonnet";
         },
       ],
       subnetIDs: std.split(std.extVar('awsIntraSubnets'), ','),
-      roleAdditionalPolicies: [
+      roleAdditionalPolicies: std.setUnion([
         'arn:aws:iam::aws:policy/AmazonEKSVPCResourceController',
         'arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore',
         'arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy',
-        std.format('arn:aws:iam::%s:policy/capa-nodes-elb-policy', awsAccountId),
-        std.format('arn:aws:iam::%s:policy/capa-nodes-assume-policy', awsAccountId),
-        std.format('arn:aws:iam::%s:policy/capa-nodes-karpenter-controller-policy', awsAccountId),
-      ],
+        std.format("arn:aws:iam::%s:policy/capa-nodes-elb-policy", awsAccountId),
+        std.format("arn:aws:iam::%s:policy/capa-nodes-assume-assume-policy", awsAccountId),
+        std.format("arn:aws:iam::%s:policy/capa-nodes-karpenter-controller-policy", awsAccountId),
+      ], [std.format('arn:aws:iam::' + awsAccountId + ':policy/%s', additionalNodePolicy) for additionalNodePolicy in std.split(std.extVar('additionalNodePolicies'), ',')]),
+
+      // roleAdditionalPolicies: [
+      //   'arn:aws:iam::aws:policy/AmazonEKSVPCResourceController',
+      //   'arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore',
+      //   'arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy',
+      //   std.format('arn:aws:iam::%s:policy/capa-nodes-elb-policy', awsAccountId),
+      //   std.format('arn:aws:iam::%s:policy/capa-nodes-assume-policy', awsAccountId),
+      //   std.format('arn:aws:iam::%s:policy/capa-nodes-karpenter-controller-policy', awsAccountId),
+      // ],
     },
   },
 ]

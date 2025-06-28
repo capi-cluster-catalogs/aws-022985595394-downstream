@@ -7,7 +7,7 @@ clusterConfig:
   endpointAccess:
     public: true
     publicCIDRs: "0.0.0.0/0"
-  additionalSecurityGroup: sg-0a1e3fb45748a03b8 #capi-shared-sg
+  additionalSecurityGroup: sg-0cff719475cd771e4 #capi-shared-sg - depending on vpc
   # adminAccessRoleNames: "gitlab-runner-provisioner-role,whatever"
   adminAccessRoleNames: "gitlab-runner-provisioner-role"
   additionalTags:
@@ -47,7 +47,7 @@ aws:
   region: us-east-1
   availabilityZones: "us-east-1a,us-east-1b"
   networking:
-    vpcId: vpc-04c76c355e6c7d395
-    publicSubnets: "subnet-0cf9753f264b15813,subnet-01859952eaa7295ee"
-    privateSubnets: "subnet-0f3c87138547be048,subnet-07795a170e35ac68a"
-    intraSubnets: "subnet-0f7284d81ddb3229f,subnet-0651567f40cf51151"
+    vpcId: vpc-00b26597f26ccd886
+    publicSubnets: "subnet-0ba740ba10176793b,subnet-0e35eb24f2c102cc8"
+    privateSubnets: "subnet-099cb17c558827f11,subnet-0eb9f8dc4b07aaebd"
+    intraSubnets: "subnet-0f8e0161edef452b6,subnet-0bcf604fb5c773afc"
